@@ -13,6 +13,6 @@ public class Main {
 	    BeanFactory factory=new XmlBeanFactory(resource);  
 	      
 	    User user=(User)factory.getBean("userbean");  
-	    user.displayInfo();  
+	    user.toString();  
 	}  
 }
