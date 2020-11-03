@@ -6,12 +6,16 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans  
                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
   
-<bean id="userbean" class="com.shoppingapp.entity.User">  
-	<property name="id" value="1"></property>
-	<property name="name" value="George"></property>
-	<property name="password" value="p455w0rd"></property>
-	<property name="email" value="george@mail.com"></property>
-	<property name="privilage" value="STANDARD"></property>  
-</bean>  
+	<bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name = "prefix" value = "/WEB-INF/jsp/" />
+		<property name = "suffix" value = ".jsp" />
+	</bean>
+	<bean id="userbean" class="com.shoppingapp.entity.User">  
+		<property name="id" value="1"></property>
+		<property name="name" value="George"></property>
+		<property name="password" value="p455w0rd"></property>
+		<property name="email" value="george@mail.com"></property>
+		<property name="privilage" value="STANDARD"></property>  
+	</bean>
   
 </beans>

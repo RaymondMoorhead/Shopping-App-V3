@@ -10,23 +10,25 @@
 
 <%@ include file = "header.jsp"%>
 
-<form method = "post" action = "userAdd">
-<table border="1">
-  <tr>
-    <td>Name:</td>
-    <td>
-      <input type = "text" name = "uname" size = "20">
-    </td>
-  </tr>
-  <tr>
-    <td>Password:</td>
-    <td>
-      <input type = "password" name = "pass" size = "20">
-    </td>
-  </tr>
-</table>
-<p><input type = "submit" value = "submit" name = "b1"></p>
-</form>
+<h1>${message}</h1>
+
+	<form method = "post" action = "login">
+		<table border="1">
+		  <tr>
+		    <td>Name:</td>
+		    <td>
+		      <input type = "text" name = "uname" size = "20">
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>Password:</td>
+		    <td>
+		      <input type = "password" name = "pass" size = "20">
+		    </td>
+		  </tr>
+		</table>
+		<p><input type = "submit" value = "submit" name = "b1"></p>
+	</form>
 
 <%@ include file = "footer.jsp"%>
 
