@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CustomController
+public class LoginController
 {
 	@RequestMapping(value="/welcome")
 	public ModelAndView welcomeUser()
