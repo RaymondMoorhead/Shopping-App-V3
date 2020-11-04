@@ -4,7 +4,7 @@
 	version="3.0">
 
 	<display-name>Servlet 3.0 Web Application</display-name>
-	<display-name>Spring Security Example</display-name>
+	<display-name>Shopping App</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

@@ -68,7 +68,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>SpringWebwithSpringSecurity</finalName>
+		<finalName>ShoppingApp</finalName>
 		<pluginManagement>
 
 			<plugins>
@@ -87,7 +87,7 @@
 					<configuration>
 						<url>http://localhost:8080/manager/text</url>
 						<server>tomcat7</server>
-						<path>/SpringWebwithSpringSecurity</path>
+						<path>/ShoppingApp</path>
 						<update>true</update>
 					</configuration>
 				</plugin>
