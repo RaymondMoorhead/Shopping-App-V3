@@ -33,7 +33,7 @@
 	<context:component-scan base-package="com.shoppingapp" />
 
 	<sec:authentication-manager>
-		<authentication-provider ref="customAuthenticationProvider" />
+		<authentication-provider ref="userAuthenticationProvider" />
 	</sec:authentication-manager>
 
 </beans:beans>
