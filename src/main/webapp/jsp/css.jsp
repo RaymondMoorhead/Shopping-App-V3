@@ -1,6 +1,6 @@
 <style>
 body{
-	background-color:blue;
+	background-color:rgb(123,183,145);
 	font-family:arial;
 	margin:0;
 }
@@ -9,7 +9,7 @@ div.main{
 	margin:auto;
 	padding: 2em;
 	background-color:white;
-	border-radius:2em;
+	min-height:100%;
 }
 label{
 	margin:1em;
