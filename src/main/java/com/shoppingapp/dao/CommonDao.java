@@ -43,15 +43,14 @@ public class CommonDao {
 		resultSet.close();
 		
 		if(!found) {
-			PreparedStatement stmt = conn.prepareStatement("create database ?");
-			stmt.setString(1, dbName);
-			stmt.executeUpdate();
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("create database " + dbName);
 		}
 	}
 	
 	public static void createTableIfMissing(String table, String values) throws SQLException{
 		Connection conn = getConnection();
-		ResultSet resultSet = conn.getMetaData().getTables(null, null, table, new String[] {"TABLE"});;
+		ResultSet resultSet = conn.getMetaData().getTables(dbName, null, table, new String[] {"TABLE"});;
 
 		if (!resultSet.next()) {
 			String sql = "create table " + table + "(" + values + ")";
