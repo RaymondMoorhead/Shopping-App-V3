@@ -10,11 +10,6 @@
 <%@include file="css.jsp" %>
 </head>
 <body>
-<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-      <font color="red">
-        Your login attempt was not successful due to <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
-      </font>
-</c:if>
 	<div class="main" >
 		<h1>Login</h1>
 		<form name="loginForm" action="authenticateUser" method="post">
@@ -29,6 +24,11 @@
 				<button class="btn btn-primary">Submit</button>
 			</div>
 		</form>
+		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+		<div class="error_message"><font color="red"> 
+	      	Your login attempt was not successful due to <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+		</font></div>
+		</c:if>
 	</div>
 </body>
 </html>

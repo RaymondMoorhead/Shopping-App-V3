@@ -50,7 +50,16 @@ public class UserDao {
 
 	public static User getUser(String name, String password) {
 		User result = null;
+		
+		String encrypted = encryptPass(name, password);
+        System.out.println("Input: " + encrypted);
+        for(int i = 0; i < encrypted.length(); ++i)
+            System.out.print(encrypted.codePointAt(i) + " ");
+        System.out.println();
+		
 			try {
+				System.out.println("getUser("+name+", "+password+")");
+				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
@@ -65,6 +74,12 @@ public class UserDao {
 										rs.getString("email"),
 										User.PRIVILAGE.valueOf(rs.getString("privilage")));
 					
+					encrypted = result.password;
+                    System.out.println("Input: " + encrypted);
+                    for(int i = 0; i < encrypted.length(); ++i)
+                        System.out.print(encrypted.codePointAt(i) + " ");
+                    System.out.println();
+                    
 					// check now that user is valid, use it as an early out
 					if(!result.password.equals(encryptPass(name, password)))
 						return null;
