@@ -16,7 +16,7 @@
       </font>
 </c:if>
 	<div class="main" >
-		<h1>Login</h1>
+		<h1>Register</h1>
 		<form name="loginForm" action="registerUser" method="post">
 			<fieldset>
 				<label for="username">User-name</label><input class="textbox" type="text" name="username" /><br /> 
