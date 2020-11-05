@@ -1,17 +1,31 @@
 package com.shoppingapp.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 	
 	public enum PRIVILAGE {
 		STANDARD, ADMIN
 	}
 
-	private int id;
-	private String name;
-	private String password;
-	private String email;
-	private PRIVILAGE privilage;
+	public int id;
+	public String name;
+	public String password;
+	public String email;
+	public PRIVILAGE privilage;
+	public List<Invoice> purchases;
 	
+	public User(int id, String name, String password, String email, PRIVILAGE privilage) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.email = email;
+		this.privilage = privilage;
+		this.purchases = new ArrayList<Invoice>();
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -50,6 +64,18 @@ public class User {
 
 	public void setPrivilage(PRIVILAGE privilage) {
 		this.privilage = privilage;
+	}
+
+	public List<Invoice> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(List<Invoice> purchases) {
+		this.purchases = purchases;
+	}
+	
+	public void addPurchase(Invoice purchase) {
+		purchases.add(purchase);
 	}
 
 	@Override

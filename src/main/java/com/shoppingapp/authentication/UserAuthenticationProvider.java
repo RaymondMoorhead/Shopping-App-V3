@@ -12,6 +12,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.shoppingapp.dao.CommonDao;
+import com.shoppingapp.dao.UserDao;
+
 
 @Component
 public class UserAuthenticationProvider implements AuthenticationProvider
@@ -38,9 +41,10 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 
 		private boolean authorizedUser(String userName, String password)
 		{
+			CommonDao.initialize();
 				System.out.println("username is :" + userName+" and password is "+password );
-				if("Chandan".equals(userName) && "Chandan".equals(password))
-						return true;
+				if(UserDao.getUser(userName, password) != null)
+					return true;
 				return false;
 		}
 
