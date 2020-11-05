@@ -47,7 +47,7 @@ public class UserDao {
 
 	public static User getUser(String name, String password) {
 		User result = null;
-		System.out.println(encryptPass(name, password));
+		//System.out.println(encryptPass(name, password));
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
