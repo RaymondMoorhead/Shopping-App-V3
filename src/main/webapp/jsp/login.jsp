@@ -7,47 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login</title>
-<style>
-body{
-	background-color:blue;
-	font-family:arial;
-}
-div.main{
-	width:80%;
-	margin:auto;
-	padding: 2em;
-	background-color:white;
-	border-radius:2em;
-}
-label{
-	margin:1em;
-	display:inline-block;
-	width:10%;
-}
-.textbox{
-	width:30%;
-	padding:0.5em;
-	border-radius:.5em;
-}
-
-.btn:hover{
-  background-color: #1e6e21;
-}
-.btn{
-	padding:.5em 1em .5em;
-	border-radius:.5em;
-	font-weight:bold;
-	color:white;
-}
-.btn.btn-primary{
-	background-color:green;
-	color:white;
-	border-color:green;
-}
-fieldset{
-	border:0;
-}
-</style>
+<%@include file="css.jsp" %>
 </head>
 <body>
 <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
