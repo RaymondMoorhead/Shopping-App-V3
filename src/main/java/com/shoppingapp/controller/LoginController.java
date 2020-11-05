@@ -1,5 +1,7 @@
 package com.shoppingapp.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,12 +14,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.shoppingapp.service.Service;
+
 @Controller
 public class LoginController
 {
 	@RequestMapping(value="/welcome")
-	public ModelAndView welcomeUser()
+	public ModelAndView welcomeUser(HttpServletRequest request, HttpServletResponse response)
 	{
+		//both of these strings are null
+		String userName = request.getParameter("username");
+		String userPass = request.getParameter("userpass");
+		System.out.println("username is: " + userName + "and userPass is: " + userPass);
+		try {
+			Service.doPost(request, response, userName, userPass);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ModelAndView("welcome");
 	}
 		

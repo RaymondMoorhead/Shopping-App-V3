@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.shoppingapp.entity.Item;
 
+
+
 public class ItemDao {
 	
 	// called by DaoManager.initialize
