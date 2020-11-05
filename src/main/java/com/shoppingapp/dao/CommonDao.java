@@ -43,9 +43,8 @@ public class CommonDao {
 		resultSet.close();
 		
 		if(!found) {
-			PreparedStatement stmt = conn.prepareStatement("create database ?");
-			stmt.setString(1, dbName);
-			stmt.executeUpdate();
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("create database " + dbName);
 		}
 	}
 	
