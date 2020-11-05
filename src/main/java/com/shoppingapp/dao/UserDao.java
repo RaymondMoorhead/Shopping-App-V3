@@ -15,16 +15,19 @@ import com.shoppingapp.entity.Item;
 import com.shoppingapp.entity.User;
 
 public class UserDao {
-	// called by DaoManager.initialize
+	// called by CommonDao.initialize
 	static void initialize() {
 		try {
-			CommonDao.createTableIfMissing("user",
+			boolean tablesCreated;
+			if(CommonDao.createTableIfMissing("user",
 					"id int NOT NULL AUTO_INCREMENT, "
 					+ "name varchar(255), "
 					+ "password varchar(255), "
 					+ "email varchar(255), "
 					+ "privilage varchar(32),"
-					+ "PRIMARY KEY(id)");
+					+ "PRIMARY KEY(id)")) {
+				addUser(new User(-1, "admin", "admin", "noreply@mail.com", User.PRIVILAGE.ADMIN));
+			}
 			
 			CommonDao.createTableIfMissing("invoice",
 					"user_id int NOT NULL, "
@@ -47,7 +50,10 @@ public class UserDao {
 
 	public static User getUser(String name, String password) {
 		User result = null;
+<<<<<<< HEAD
 		//System.out.println(encryptPass(name, password));
+=======
+>>>>>>> refs/remotes/origin/main
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
@@ -194,7 +200,6 @@ public class UserDao {
 	}
 	
 	private static String encryptPass(String name, String password) {
-		//return Encrypt.encryptIrreversable(password, name, password, 20);
-		return password;
+		return Encrypt.encryptIrreversable(password, name, password, 20);
 	}
 }

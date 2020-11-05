@@ -15,10 +15,14 @@ public class ItemDao {
 	// called by DaoManager.initialize
 	static void initialize(){
 		try {
-			CommonDao.createTableIfMissing("item",
+			if(CommonDao.createTableIfMissing("item",
 					"code varchar(10) PRIMARY KEY, "
 					+ "name varchar(255), "
-					+ "price bigint");
+					+ "price bigint")) {
+				addItem(new Item("Sofa, Leather", "Sl1", 200000));
+				addItem(new Item("Sofa, Handwoven", "Sh1", 500000));
+				addItem(new Item("Chair, Leather", "Cl1", 5000));
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -75,7 +79,7 @@ public class ItemDao {
 			PreparedStatement stmt;
 			
 			stmt = conn.prepareStatement("insert into item(code, name, price) values(?, ?, ?)");
-			stmt.setString(1, item.name);
+			stmt.setString(1, item.code);
 			stmt.setString(2, item.name);
 			stmt.setLong(3, item.price);
 			stmt.executeUpdate();
