@@ -49,6 +49,7 @@ public class UserDao {
 	}
 
 	public static User getUser(String name, String password) {
+		
 		User result = null;
 			try {
 				Connection conn = CommonDao.getConnection();
@@ -196,6 +197,7 @@ public class UserDao {
 	}
 	
 	private static String encryptPass(String name, String password) {
-		return Encrypt.encryptIrreversable(password, name, password, 20);
+		//return Encrypt.encryptIrreversable(password, name, password, 20);
+		return password;
 	}
 }
