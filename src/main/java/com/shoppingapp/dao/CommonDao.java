@@ -50,7 +50,7 @@ public class CommonDao {
 	
 	public static void createTableIfMissing(String table, String values) throws SQLException{
 		Connection conn = getConnection();
-		ResultSet resultSet = conn.getMetaData().getTables(null, null, table, new String[] {"TABLE"});;
+		ResultSet resultSet = conn.getMetaData().getTables(dbName, null, table, new String[] {"TABLE"});;
 
 		if (!resultSet.next()) {
 			String sql = "create table " + table + "(" + values + ")";
