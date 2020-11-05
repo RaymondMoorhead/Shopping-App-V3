@@ -27,11 +27,12 @@ public class CommonDao {
 		UserDao.initialize();
 	}
 	
-	public static void createDatabaseIfMissing() throws SQLException, ClassNotFoundException{
+	public static boolean createDatabaseIfMissing() throws SQLException, ClassNotFoundException{
 		Class.forName(driver);
 		Connection conn = DriverManager.getConnection(url + "?" + options, username, password);
 		ResultSet resultSet = conn.getMetaData().getCatalogs();
 		boolean found = false;
+		boolean created = false;
 
 		while (resultSet.next()) {
 			// Get the database name, which is at position 1
@@ -46,18 +47,22 @@ public class CommonDao {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("create database " + dbName);
 		}
+		return !found;
 	}
 	
-	public static void createTableIfMissing(String table, String values) throws SQLException{
+	public static boolean createTableIfMissing(String table, String values) throws SQLException{
 		Connection conn = getConnection();
 		ResultSet resultSet = conn.getMetaData().getTables(dbName, null, table, new String[] {"TABLE"});
-
+		boolean created = false;
+		
 		if (!resultSet.next()) {
 			String sql = "create table " + table + "(" + values + ")";
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
+			created = true;
 		}
 		resultSet.close();
+		return created;
 	}
 
 	public static Connection getConnection() {
