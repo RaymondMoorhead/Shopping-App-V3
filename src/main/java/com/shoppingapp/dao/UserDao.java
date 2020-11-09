@@ -56,7 +56,7 @@ public class UserDao {
 		User result = null;
 		
 			try {
-				System.out.println("getUser("+name+", "+password+")");
+				System.out.println("getUser("+username+", "+password+")");
 				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
