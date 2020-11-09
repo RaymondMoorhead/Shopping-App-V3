@@ -196,7 +196,7 @@ public class UserDao {
 
 			if(userExists(user.name))
 				return;
-			user.password = encryptPass(user.name, user.password);
+			user.password = encryptPass(user.username, user.password);
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
