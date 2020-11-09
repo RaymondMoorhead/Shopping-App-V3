@@ -3,6 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -14,15 +15,14 @@
 <div class="main" >
 	<h2>Product Inventory Page</h2>
 	<form action="" method="GET">
-		<% int[] values = {5,10,20,50,100}; %>
-		<select onchange="this.form.submit()">
-			<c:forEach var="i" begin="0" end="values.length">
-				<option value="<c:out value="values[i]"/>"><c:out value="values[i]"/></option>
-			</c:forEach> 
+		<select>
+			<c:forTokens items="5,10,20,50,100" delims="," var="size">
+			<option value="<c:out value="${size}"/>"><c:out value="${size}"/></option>
+			</c:forTokens>
 		</select>
 	</form>
-	<% String[] products = {"Black Lotus", "Superman issue 1", "The Inverted Jenny"}; %>
-	<table>
+	<p>${fn:length(products) }</p>
+	<table modelAttribute="products">
 		<thead>
 			<tr>
 				<td></td>
@@ -33,14 +33,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			<C:forEach var="i" begin="0" end="products.length">
+			<c:forEach var="product" items="${products}">
 			<tr>
-				<td class="thumbnail"><img src="/f"/></td>
-				<td><c:out value="products[i]"/></td>
-				<td>Collector's Item</td>
-				<td>More than you can afford</td>
+				<td ><img src="/f"/></td>
+				<td>${product.name }</td>
+				<td>${product.category }</td>
+				<td>${product.condtion }</td>
+				<td>${product.price }</td>
 			</tr>
-			</C:forEach>
+			</c:forEach>
 		</tbody>
 	</table>
 </div>
