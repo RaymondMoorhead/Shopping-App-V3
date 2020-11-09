@@ -1,45 +1,42 @@
 package com.shoppingapp.service;
 
-import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
-
+import com.shoppingapp.dao.ItemDao;
 import com.shoppingapp.dao.UserDao;
+import com.shoppingapp.entity.Invoice;
+import com.shoppingapp.entity.Item;
 import com.shoppingapp.entity.User;
+import com.shoppingapp.entity.User.PRIVILAGE;
 
-public class Service extends HttpServlet{
+public class Service {
 	
-	public static void doPost(HttpServletRequest request, HttpServletResponse response, String userName, String userPass) throws IOException {
-        
-        HttpSession session = request.getSession();
-        
-        SetCurUser(session, userName, userPass);
-        
-        System.out.println("in doPost, session holds: " + session.getAttribute("curUser"));
+	public static Authentication findPrincipal() {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		System.out.println("Auth is: " + auth.getPrincipal());
+		return auth;
 	}
 	
-	private static final long serialVersionUID = 1L;
-
-	/*
-	 * //@ModelAttribute("curUser") public static User GetCurUser(HttpSession
-	 * session) { return (User) session.getAttribute("curUser"); }
-	 */
+	public void addNewItem(String code, String name, long price) {
+		Item item = new Item(code, name, price);
+		ItemDao.addItem(item);
+	}
 	
-	public static void SetCurUser(HttpSession session, String userName, String userPass) {
-		//System.out.println("username is: " + userName + "and userPass is: " + userPass);
-		User user = UserDao.getUser(userName, userPass);
-		System.out.println("userName is: " + userName);
-		System.out.println("userpass is: " + userPass);
-		System.out.println("user is: " + (user==null ? "null" : user.toString()));
-		if(user != null) {
-			session.setAttribute("curUser", user);
-		}
-		
+	public void addNewUser(int id, String name, String password, String email, PRIVILAGE privilage) {
+		User user = new User(id, name, password, email, privilage);
+		UserDao.addUser(user);
+	}
+	
+	//invoice additions to be added
+	public void addInvoice(String custName, LocalDate date, int invoiceNum, List<Item> items) {
+		Invoice invoice = new Invoice(custName, date, invoiceNum, items);
+		//ItemDao.AddTransaction(Invoice invoice);
 	}
 
 }
