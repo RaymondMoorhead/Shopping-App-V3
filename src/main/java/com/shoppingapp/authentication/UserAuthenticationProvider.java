@@ -43,8 +43,10 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 		{
 			CommonDao.initialize();
 				System.out.println("username is :" + userName+" and password is "+password );
-				if(UserDao.getUser(userName, password) != null)
+				if(UserDao.getUser(userName, password) != null) {
+					System.out.println("user: "+UserDao.getUser(userName, password));
 					return true;
+				}
 				return false;
 		}
 

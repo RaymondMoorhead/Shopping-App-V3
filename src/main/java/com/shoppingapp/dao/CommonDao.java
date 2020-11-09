@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class CommonDao {
 	private static final String username = "root";
-	private static final String password = "root";
+	private static final String password = "";
 	private static final String url = "jdbc:mysql://localhost";
 	private static final String options = "useSSL=false";
 	private static final String dbName = "shopping_app";

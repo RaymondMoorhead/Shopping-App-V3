@@ -54,7 +54,10 @@ public class UserDao {
 	public static User getUser(String username, String password) {
 		
 		User result = null;
+		
 			try {
+				System.out.println("getUser("+name+", "+password+")");
+				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
@@ -72,6 +75,7 @@ public class UserDao {
 										rs.getBoolean("enabled"),
 										User.PRIVILAGE.valueOf(rs.getString("privilage")));
 					
+                    
 					// check now that user is valid, use it as an early out
 					if(!result.password.equals(encryptPass(username, password)))
 						return null;

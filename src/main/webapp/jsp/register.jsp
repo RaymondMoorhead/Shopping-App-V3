@@ -10,25 +10,28 @@
 <%@include file="css.jsp" %>
 </head>
 <body>
+<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+      <font color="red">
+        Your registration attempt was not successful due to <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+      </font>
+</c:if>
 	<div class="main" >
-		<h1>Login</h1>
-		<form name="loginForm" action="authenticateUser" method="post">
+		<h1>Register</h1>
+		<form name="loginForm" action="registerUser" method="post">
 			<fieldset>
 				<label for="username">User-name</label><input class="textbox" type="text" name="username" /><br /> 
 			</fieldset>
 			<fieldset>
 				<label for="password">Password</label><input class="textbox" type="password" name="password" /> <br/>
 			</fieldset>
+			<fieldset>
+				<label for="confirm_password">Password</label><input class="textbox" type="password" name="confirm_password" /> <br/>
+			</fieldset>
 			<div style="padding-left:10em;">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<button class="btn btn-primary">Submit</button>
 			</div>
 		</form>
-		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-		<div class="error_message"><font color="red"> 
-	      	Your login attempt was not successful due to <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
-		</font></div>
-		</c:if>
 	</div>
 </body>
 </html>

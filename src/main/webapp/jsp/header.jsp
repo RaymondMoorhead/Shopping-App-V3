@@ -5,7 +5,7 @@
 	<ul class="navbar">
 		<li><h1 class="Title">Furniture Hub</h1></li>
 		<li><a href="<c:url value="/" />">Home</a></li>
-		<li><a href="<c:url value="/prducts"/>">Products</a></li>
+		<li><a href="<c:url value="/product-list"/>">Products</a></li>
 		<li><a href="<c:url value="/about"/>">About us</a></li>
 		<li><a href="<c:url value="/contact"/>">Contact us</a></li>
 	</ul>
