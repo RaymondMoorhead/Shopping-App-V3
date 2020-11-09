@@ -22,11 +22,14 @@ public class UserDao {
 			if(CommonDao.createTableIfMissing("user",
 					"id int NOT NULL AUTO_INCREMENT, "
 					+ "name varchar(255), "
+					+ "username varchar(255), "
 					+ "password varchar(255), "
 					+ "email varchar(255), "
+					+ "phone varchar(32), "
+					+ "enabled boolean, "
 					+ "privilage varchar(32),"
 					+ "PRIMARY KEY(id)")) {
-				addUser(new User(-1, "admin", "admin", "noreply@mail.com", User.PRIVILAGE.ADMIN));
+				addUser(new User(-1, "admin", "admin", "admin", "noreply@mail.com", "999-999-9999", true, User.PRIVILAGE.ADMIN));
 			}
 			
 			CommonDao.createTableIfMissing("invoice",
@@ -48,30 +51,33 @@ public class UserDao {
 		}
 	}
 
-	public static User getUser(String name, String password) {
+	public static User getUser(String username, String password) {
 		
 		User result = null;
 		
 			try {
-				System.out.println("getUser("+name+", "+password+")");
+				System.out.println("getUser("+username+", "+password+")");
 				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
 				// get fundamental user data
 				stmt = conn.prepareStatement("select * from user where name = ?");
-				stmt.setString(1, name);
+				stmt.setString(1, username);
 				ResultSet rs = stmt.executeQuery();
 				if(rs.next()) {
 					result = new User(rs.getInt("id"),
-										name,
+										rs.getString("name"),
+										username,
 										rs.getString("password"),
 										rs.getString("email"),
+										rs.getString("phone"),
+										rs.getBoolean("enabled"),
 										User.PRIVILAGE.valueOf(rs.getString("privilage")));
 					
                     
 					// check now that user is valid, use it as an early out
-					if(!result.password.equals(encryptPass(name, password)))
+					if(!result.password.equals(encryptPass(username, password)))
 						return null;
 				}
 				else
@@ -87,7 +93,7 @@ public class UserDao {
 				ResultSet rsItem;
 				while(rs.next()) {
 					items = new ArrayList<Item>();
-					curInvoice = new Invoice(name,
+					curInvoice = new Invoice(result.getName(),
 							rs.getDate("local_date").toLocalDate(),
 							rs.getInt("id"),
 							items);
@@ -102,6 +108,8 @@ public class UserDao {
 						while(rsItem.next()) {
 							items.add(new Item(rsItem.getString("name"),
 												rsItem.getString("code"),
+												rsItem.getString("category"),
+												Item.CONDITION.valueOf(rsItem.getString("condition")),
 												rsItem.getLong("price")));
 						}
 						rsItem.close();
@@ -115,6 +123,56 @@ public class UserDao {
 				e.printStackTrace();
 			}
 		return result;
+	}
+	
+	// get all users
+	public static List<User> getUsers() {
+		ArrayList<User> users = new ArrayList<User>();
+			try {
+				Connection conn = CommonDao.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("select id,  from user limit ?, ?");
+				while(rs.next()) {
+					users.add(new User(rs.getInt("id"),
+										rs.getString("name"),
+										rs.getString("username"),
+										rs.getString("password"),
+										rs.getString("email"),
+										rs.getString("phone"),
+										rs.getBoolean("enabled"),
+										User.PRIVILAGE.valueOf(rs.getString("privilage"))));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return users;
+	}
+	
+	// get a certain number of users (pagination)
+	public static List<User> getUsers(int startRow, int numRows) {
+		ArrayList<User> users = new ArrayList<User>();
+			try {
+				Connection conn = CommonDao.getConnection();
+				PreparedStatement stmt = conn.prepareStatement("select name from user limit ?, ?");
+				stmt.setInt(0, startRow);
+				stmt.setInt(1, numRows);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					users.add(new User(rs.getInt("id"),
+										rs.getString("name"),
+										rs.getString("username"),
+										rs.getString("password"),
+										rs.getString("email"),
+										rs.getString("phone"),
+										rs.getBoolean("enabled"),
+										User.PRIVILAGE.valueOf(rs.getString("privilage"))));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return users;
 	}
 	
 	public static boolean userExists(String name) {
@@ -138,16 +196,19 @@ public class UserDao {
 
 			if(userExists(user.name))
 				return;
-			user.password = encryptPass(user.name, user.password);
+			user.password = encryptPass(user.username, user.password);
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
-				stmt = conn.prepareStatement("insert into user(name, password, email, privilage) values(?, ?, ?, ?)");
+				stmt = conn.prepareStatement("insert into user(name, username, password, email, phone, enabled, privilage) values(?, ?, ?, ?, ?, ?, ?)");
 				stmt.setString(1, user.name);
-				stmt.setString(2, user.password);
-				stmt.setString(3, user.email);
-				stmt.setString(4, user.privilage.name());
+				stmt.setString(2, user.username);
+				stmt.setString(3, user.password);
+				stmt.setString(4, user.email);
+				stmt.setString(5, user.phone);
+				stmt.setBoolean(6, user.enabled);
+				stmt.setString(7, user.privilage.name());
 				stmt.executeUpdate();
 				
 				// new users don't have invoices, so we don't need to add them

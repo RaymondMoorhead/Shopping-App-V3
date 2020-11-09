@@ -20,10 +20,12 @@ public class ItemDao {
 			if(CommonDao.createTableIfMissing("item",
 					"code varchar(10) PRIMARY KEY, "
 					+ "name varchar(255), "
+					+ "category varchar(255), "
+					+ "state varchar(32), "
 					+ "price bigint")) {
-				addItem(new Item("Sofa, Leather", "Sl1", 200000));
-				addItem(new Item("Sofa, Handwoven", "Sh1", 500000));
-				addItem(new Item("Chair, Leather", "Cl1", 5000));
+				addItem(new Item("Sofa, Leather", "Sl1", "Couch", Item.CONDITION.NEW, 200000));
+				addItem(new Item("Sofa, Handwoven", "Sh1", "Couch", Item.CONDITION.USED, 500000));
+				addItem(new Item("Chair, Leather", "Cl1", "Chair", Item.CONDITION.NEW, 5000));
 			}
 			
 		} catch (SQLException e) {
@@ -32,19 +34,21 @@ public class ItemDao {
 		}
 	}
 
+	// get all items
 	public static List<Item> getItems() {
 		ArrayList<Item> items = new ArrayList<Item>();
 			try {
 				Connection conn = CommonDao.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet result = stmt.executeQuery("select * from item");
-				items.clear();
 				Item curItem;
 				while(result.next()) {
 					items.add(curItem = new Item());
 					curItem.code = result.getString("code");
 					curItem.name = result.getString("name");
 					curItem.price = result.getLong("price");
+					curItem.category = result.getString("category");
+					curItem.condition = Item.CONDITION.valueOf(result.getString("state"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -53,12 +57,14 @@ public class ItemDao {
 		return items;
 	}
 	
-	public static List<Item> getItems(String code) {
+	// get a certain number of items (pagination)
+	public static List<Item> getItems(int startRow, int numRows) {
 		ArrayList<Item> items = new ArrayList<Item>();
 			try {
 				Connection conn = CommonDao.getConnection();
-				PreparedStatement stmt = conn.prepareStatement("select * from item where code = ?");
-				stmt.setString(1, code);
+				PreparedStatement stmt = conn.prepareStatement("select * from item limit ?, ?");
+				stmt.setInt(0, startRow);
+				stmt.setInt(1, numRows);
 				ResultSet result = stmt.executeQuery();
 				items.clear();
 				Item curItem;
@@ -67,6 +73,8 @@ public class ItemDao {
 					curItem.code = result.getString("code");
 					curItem.name = result.getString("name");
 					curItem.price = result.getLong("price");
+					curItem.category = result.getString("category");
+					curItem.condition = Item.CONDITION.valueOf(result.getString("state"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -75,15 +83,38 @@ public class ItemDao {
 		return items;
 	}
 	
+	public static Item getItem(String code) {
+		Item item = new Item();
+			try {
+				Connection conn = CommonDao.getConnection();
+				PreparedStatement stmt = conn.prepareStatement("select * from item where code = ?");
+				stmt.setString(1, code);
+				ResultSet result = stmt.executeQuery();
+				if(result.next()) {
+					item.setCode(result.getString("code"));
+					item.setName(result.getString("name"));
+					item.setPrice(result.getLong("price"));
+					item.setCategory(result.getString("category"));
+					item.setCondition(Item.CONDITION.valueOf(result.getString("state")));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return item;
+	}
+	
 	public static void addItem(Item item) {
 		try {
 			Connection conn = CommonDao.getConnection();
 			PreparedStatement stmt;
 			
-			stmt = conn.prepareStatement("insert into item(code, name, price) values(?, ?, ?)");
+			stmt = conn.prepareStatement("insert into item(code, name, price, category, state) values(?, ?, ?, ?, ?)");
 			stmt.setString(1, item.code);
 			stmt.setString(2, item.name);
 			stmt.setLong(3, item.price);
+			stmt.setString(4, item.category);
+			stmt.setString(5, item.condition.name());
 			stmt.executeUpdate();
 			
 		} catch (SQLException e) {
