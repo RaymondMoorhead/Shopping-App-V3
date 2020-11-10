@@ -38,7 +38,7 @@
 				<td ><img src="/f"/></td>
 				<td>${product.name }</td>
 				<td>${product.category }</td>
-				<td>${product.condtion }</td>
+				<td>${product.condition }</td>
 				<td>${product.price }</td>
 			</tr>
 			</c:forEach>
