@@ -1,7 +1,5 @@
 package com.shoppingapp.controller;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,16 +21,8 @@ public class LoginController
 	@RequestMapping(value="/welcome")
 	public ModelAndView welcomeUser(HttpServletRequest request, HttpServletResponse response)
 	{
-		//both of these strings are null
-		String userName = request.getParameter("username");
-		String userPass = request.getParameter("userpass");
-		System.out.println("username is: " + userName + "and userPass is: " + userPass);
-		try {
-			Service.doPost(request, response, userName, userPass);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Service.findPrincipal();
+		
 		return new ModelAndView("welcome");
 	}
 		
