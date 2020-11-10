@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.shoppingapp.dao.CommonDao;
 import com.shoppingapp.dao.UserDao;
+import com.shoppingapp.entity.LoginState;
 
 
 @Component
@@ -24,8 +25,9 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 		{
 				String userName = authentication.getName();
 				String password = authentication.getCredentials().toString();
+				LoginState login = UserDao.getUser(userName, password);
 
-				if (authorizedUser(userName, password))
+				if (login.user != null)
 				{
 						List<GrantedAuthority> grantedAuths = new ArrayList<>();
 						grantedAuths.add(()-> {return "AUTH_USER";});
@@ -35,19 +37,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 				}
 				else
 				{
-						throw new AuthenticationCredentialsNotFoundException("Invalid Credentials!");
+						throw new AuthenticationCredentialsNotFoundException(login.error);
 				}
-		}
-
-		private boolean authorizedUser(String userName, String password)
-		{
-			CommonDao.initialize();
-				System.out.println("username is :" + userName+" and password is "+password );
-				if(UserDao.getUser(userName, password) != null) {
-					System.out.println("user: "+UserDao.getUser(userName, password));
-					return true;
-				}
-				return false;
 		}
 
 		@Override

@@ -12,13 +12,13 @@ import java.util.List;
 import com.shoppingapp.authentication.Encrypt;
 import com.shoppingapp.entity.Invoice;
 import com.shoppingapp.entity.Item;
+import com.shoppingapp.entity.LoginState;
 import com.shoppingapp.entity.User;
 
 public class UserDao {
 	// called by CommonDao.initialize
 	static void initialize() {
 		try {
-			boolean tablesCreated;
 			if(CommonDao.createTableIfMissing("user",
 					"id int NOT NULL AUTO_INCREMENT, "
 					+ "name varchar(255), "
@@ -51,13 +51,11 @@ public class UserDao {
 		}
 	}
 
-	public static User getUser(String username, String password) {
+	public static LoginState getUser(String username, String password) {
 		
 		User result = null;
 		
 			try {
-				System.out.println("getUser("+username+", "+password+")");
-				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
@@ -78,10 +76,12 @@ public class UserDao {
                     
 					// check now that user is valid, use it as an early out
 					if(!result.password.equals(encryptPass(username, password)))
-						return null;
+						return new LoginState("Invalid Credentials", null);
+					else if(!result.isEnabled())
+						return new LoginState("Account Disabilitation", null);
 				}
 				else
-					return null;
+					return new LoginState("Invalid Credentials", null);
 				
 				// get invoice data
 				stmt = conn.prepareStatement("select * from invoice where user_id = ?");
@@ -122,7 +122,7 @@ public class UserDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return result;
+		return new LoginState(null, result);
 	}
 	
 	// get all users

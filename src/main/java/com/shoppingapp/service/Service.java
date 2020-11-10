@@ -32,7 +32,7 @@ public class Service extends HttpServlet{
 	
 	public static void SetCurUser(HttpSession session, String userName, String userPass) {
 		//System.out.println("username is: " + userName + "and userPass is: " + userPass);
-		User user = UserDao.getUser(userName, userPass);
+		User user = UserDao.getUser(userName, userPass).user;
 		System.out.println("userName is: " + userName);
 		System.out.println("userpass is: " + userPass);
 		System.out.println("user is: " + (user==null ? "null" : user.toString()));
