@@ -24,6 +24,7 @@
 				<button class="btn btn-primary">Submit</button>
 			</div>
 		</form>
+		Need an account? <a hpref="./register">Register</a>
 		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
 		<div class="error_message"><font color="red"> 
 	      	Your login attempt was not successful due to <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.

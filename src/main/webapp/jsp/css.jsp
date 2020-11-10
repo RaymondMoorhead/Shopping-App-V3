@@ -17,7 +17,7 @@ label{
 	width:10%;
 }
 .textbox{
-	width:30%;
+	width:80%;
 	padding:0.5em;
 	border-radius:.5em;
 }
@@ -108,4 +108,10 @@ fieldset{
 .float-right{
 	float:right;
 }
+
+table{
+	width:90%;
+	margin:auto;
+}
+
 </style>

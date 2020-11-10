@@ -14,15 +14,15 @@
 <%@include file="header.jsp" %>
 <div class="main" >
 	<h2>Product Inventory Page</h2>
-	<form action="" method="GET">
-		<select>
+	<form action="./product-list" method="GET">
+		<select onChange="this.form.submit()">
 			<c:forTokens items="5,10,20,50,100" delims="," var="size">
 			<option value="<c:out value="${size}"/>"><c:out value="${size}"/></option>
 			</c:forTokens>
 		</select>
 	</form>
 	<p>${fn:length(products) }</p>
-	<table modelAttribute="products">
+	<table>
 		<thead>
 			<tr>
 				<td></td>
@@ -38,7 +38,7 @@
 				<td ><img src="/f"/></td>
 				<td>${product.name }</td>
 				<td>${product.category }</td>
-				<td>${product.condtion }</td>
+				<td>${product.condition }</td>
 				<td>${product.price }</td>
 			</tr>
 			</c:forEach>

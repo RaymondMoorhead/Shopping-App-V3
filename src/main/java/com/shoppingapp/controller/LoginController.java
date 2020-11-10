@@ -39,31 +39,4 @@ public class LoginController
 		}
 		return "redirect:/login";
 	}
-	
-	public class MiniProduct{
-		public String name, category, condition; public int price;
-		MiniProduct(String n,String cat,String co,int p){
-			name=n;category=cat;condition=co;price=p;
-		}
-		public String getName() {return name;}
-		public String getCategory() {return category;}
-		public String getCondition() {return condition;}
-		public int getPrice() {return price;}
-		public void setName(String n) {name=n;}
-		public String toString() {
-			return name;
-		}
-	}
-	
-	@RequestMapping(value="/product-list", method = RequestMethod.GET)
-	public String productList(Model mo) {
-		MiniProduct[] m = new MiniProduct[] {
-				new MiniProduct("Black Lotus","Trading Card","mint",40000),
-				new MiniProduct("Superman Issue #1","Comic book", "used", 50000),
-				new MiniProduct("Inverted Jenny", "Stamp", "ripped", 100000000)
-			};
-		mo.addAttribute("products", m);
-		
-		return "product-list";
-	}
 }
