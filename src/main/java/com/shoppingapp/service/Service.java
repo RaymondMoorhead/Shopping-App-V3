@@ -24,12 +24,12 @@ public class Service {
 	}
 	
 	public void addNewItem(String code, String name, long price) {
-		Item item = new Item(code, name, price);
+		Item item = new Item(name, code, "bad_category", Item.CONDITION.NEW, price);
 		ItemDao.addItem(item);
 	}
 	
 	public void addNewUser(int id, String name, String password, String email, PRIVILAGE privilage) {
-		User user = new User(id, name, password, email, privilage);
+		User user = new User(id, name, "bad_username", password, "bad_phone", email, true, privilage);
 		UserDao.addUser(user);
 	}
 	
