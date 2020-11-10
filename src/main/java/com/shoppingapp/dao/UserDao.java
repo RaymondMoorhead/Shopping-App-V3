@@ -52,7 +52,7 @@ public class UserDao {
 	}
 
 	public static LoginState getUser(String username, String password) {
-		
+
 		User result = null;
 		
 			try {
@@ -175,14 +175,14 @@ public class UserDao {
 		return users;
 	}
 	
-	public static boolean userExists(String name) {
+	public static boolean userExists(String username) {
 
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
-				stmt = conn.prepareStatement("select exists(select 1 from user where name = ?)");
-				stmt.setString(1, name);
+				stmt = conn.prepareStatement("select exists(select 1 from user where username = ?)");
+				stmt.setString(1, username);
 				ResultSet rs = stmt.executeQuery();
 				if(rs.next() && rs.getBoolean(1))
 					return true;
@@ -217,6 +217,32 @@ public class UserDao {
 				e.printStackTrace();
 			}
 	}
+	
+	public static void updateUser(User user) {
+
+		// password must be re-encrypted, because the username may have changed
+		user.password = encryptPass(user.username, user.password);
+		try {
+			Connection conn = CommonDao.getConnection();
+			PreparedStatement stmt;
+			
+			stmt = conn.prepareStatement("update user set name=?, username=?, password=?, email=?, phone=?, enabled=?, privilage=? where id=?");
+			stmt.setString(1, user.name);
+			stmt.setString(2, user.username);
+			stmt.setString(3, user.password);
+			stmt.setString(4, user.email);
+			stmt.setString(5, user.phone);
+			stmt.setBoolean(6, user.enabled);
+			stmt.setString(7, user.privilage.name());
+			stmt.setInt(8, user.id);
+			stmt.executeUpdate();
+			
+			// new users don't have invoices, so we don't need to add them
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+}
 	
 	public static void addInvoice(User user, Invoice invoice) {
 		user.addPurchase(invoice);

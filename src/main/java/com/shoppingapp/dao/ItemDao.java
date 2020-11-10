@@ -122,4 +122,23 @@ public class ItemDao {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void updateItem(Item item) {
+		try {
+			Connection conn = CommonDao.getConnection();
+			PreparedStatement stmt;
+			
+			stmt = conn.prepareStatement("update item set name=?, price=?, category=?, state=? where code=?");
+			stmt.setString(1, item.name);
+			stmt.setLong(2, item.price);
+			stmt.setString(3, item.category);
+			stmt.setString(4, item.condition.name());
+			stmt.setString(5, item.code);
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
