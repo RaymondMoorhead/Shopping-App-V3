@@ -20,6 +20,7 @@ public class Service {
 	
 	static List<Item> cart = new ArrayList<Item>();
 	
+<<<<<<< HEAD
 	public static void addNewItem(String name, String code, String category, CONDITION condition, long price) {
 		Item item = new Item(name, code, category, condition, price);
 		ItemDao.addItem(item);
@@ -30,6 +31,16 @@ public class Service {
 		if(!UserDao.userExists(userName)) {
 			UserDao.addUser(user);
 		}
+=======
+	public void addNewItem(String code, String name, long price) {
+		Item item = new Item(name, code, "bad_category", Item.CONDITION.NEW, price);
+		ItemDao.addItem(item);
+	}
+	
+	public void addNewUser(int id, String name, String password, String email, PRIVILAGE privilage) {
+		User user = new User(id, name, "bad_username", password, "bad_phone", email, true, privilage);
+		UserDao.addUser(user);
+>>>>>>> e7d8258b686ee486775f5f220d05b8dc6dda3231
 	}
 	
 	public void addInvoice(String custName, LocalDate date, int invoiceNum, List<Item> items) {
