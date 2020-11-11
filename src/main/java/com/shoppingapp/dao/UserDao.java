@@ -12,13 +12,13 @@ import java.util.List;
 import com.shoppingapp.authentication.Encrypt;
 import com.shoppingapp.entity.Invoice;
 import com.shoppingapp.entity.Item;
+import com.shoppingapp.entity.LoginState;
 import com.shoppingapp.entity.User;
 
 public class UserDao {
 	// called by CommonDao.initialize
 	static void initialize() {
 		try {
-			boolean tablesCreated;
 			if(CommonDao.createTableIfMissing("user",
 					"id int NOT NULL AUTO_INCREMENT, "
 					+ "name varchar(255), "
@@ -51,13 +51,11 @@ public class UserDao {
 		}
 	}
 
-	public static User getUser(String username, String password) {
-		
+	public static LoginState getUser(String username, String password) {
+
 		User result = null;
 		
 			try {
-				System.out.println("getUser("+username+", "+password+")");
-				
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
@@ -78,10 +76,12 @@ public class UserDao {
                     
 					// check now that user is valid, use it as an early out
 					if(!result.password.equals(encryptPass(username, password)))
-						return null;
+						return new LoginState("Invalid Credentials", null);
+					else if(!result.isEnabled())
+						return new LoginState("Account Disabilitation", null);
 				}
 				else
-					return null;
+					return new LoginState("Invalid Credentials", null);
 				
 				// get invoice data
 				stmt = conn.prepareStatement("select * from invoice where user_id = ?");
@@ -122,7 +122,7 @@ public class UserDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return result;
+		return new LoginState(null, result);
 	}
 	
 	// get all users
@@ -175,14 +175,14 @@ public class UserDao {
 		return users;
 	}
 	
-	public static boolean userExists(String name) {
+	public static boolean userExists(String username) {
 
 			try {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
-				stmt = conn.prepareStatement("select exists(select 1 from user where name = ?)");
-				stmt.setString(1, name);
+				stmt = conn.prepareStatement("select exists(select 1 from user where username = ?)");
+				stmt.setString(1, username);
 				ResultSet rs = stmt.executeQuery();
 				if(rs.next() && rs.getBoolean(1))
 					return true;
@@ -217,6 +217,32 @@ public class UserDao {
 				e.printStackTrace();
 			}
 	}
+	
+	public static void updateUser(User user) {
+
+		// password must be re-encrypted, because the username may have changed
+		user.password = encryptPass(user.username, user.password);
+		try {
+			Connection conn = CommonDao.getConnection();
+			PreparedStatement stmt;
+			
+			stmt = conn.prepareStatement("update user set name=?, username=?, password=?, email=?, phone=?, enabled=?, privilage=? where id=?");
+			stmt.setString(1, user.name);
+			stmt.setString(2, user.username);
+			stmt.setString(3, user.password);
+			stmt.setString(4, user.email);
+			stmt.setString(5, user.phone);
+			stmt.setBoolean(6, user.enabled);
+			stmt.setString(7, user.privilage.name());
+			stmt.setInt(8, user.id);
+			stmt.executeUpdate();
+			
+			// new users don't have invoices, so we don't need to add them
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+}
 	
 	public static void addInvoice(User user, Invoice invoice) {
 		user.addPurchase(invoice);
@@ -262,7 +288,6 @@ public class UserDao {
 	}
 	
 	private static String encryptPass(String name, String password) {
-		//return Encrypt.encryptIrreversable(password, name, password, 20);
-		return password;
+		return Encrypt.encrypt(password, name, password, 20);
 	}
 }
