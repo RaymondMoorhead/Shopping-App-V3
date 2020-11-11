@@ -1,7 +1,5 @@
 package com.shoppingapp.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.shoppingapp.dao.ItemDao;
 import com.shoppingapp.dao.UserDao;
 import com.shoppingapp.entity.Item;
 import com.shoppingapp.entity.Item.CONDITION;
@@ -42,7 +41,7 @@ public class LoginController
 	@RequestMapping(value = "/cart", method = RequestMethod.GET)
 	public String CartPage(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		session.getAttribute("cart");
+		session.getAttribute("cart"); //this will be a list
 		return "cart";
 	}
 		
@@ -75,4 +74,46 @@ public class LoginController
 		}
 		return "redirect:/login";
 	}
+	
+	//add product page is brought up
+	@RequestMapping(value = "/add-product", method = RequestMethod.GET)
+	public String AddProductPage() {
+		return "add-product";
+	}
+	
+	//add product page sends the post request to add new item
+	@RequestMapping(value = "/add-product", method = RequestMethod.POST)
+	public String AddProductPost(@RequestParam String name, @RequestParam String code, @RequestParam String category, @RequestParam CONDITION condition, @RequestParam long price) {
+		Service.addNewItem(name, code, category, condition, price);
+		return "add-product";
+	}
+	
+	//customer-list page is brought up
+	@RequestMapping(value = "/customer-list", method = RequestMethod.GET)
+	public String CustomerListPage(Model mo) {
+		mo.addAttribute("customers", UserDao.getUsers());
+		return "customer-list";
+	}
+	
+	//product-detail page is brought up
+	@RequestMapping(value = "/product-detail", method = RequestMethod.GET)
+	public String ProductDetailPage(Model mo, String code) {
+		mo.addAttribute("product",ItemDao.getItem(code));
+		return "product-detail";
+	}
+	
+	//when the add to cart button is clicked, should post and save item to cart
+	@RequestMapping(value = "/product-detail", method = RequestMethod.POST)
+	public String ProductDetailPost(HttpServletRequest request, HttpServletResponse response, Item item) {
+		Service.addToCart(request, response, item);
+		return "product-detail";
+	}
+	
+	//product-list page is brought up
+	@RequestMapping(value = "/product-list", method = RequestMethod.GET)
+	public String ProductListPage(Model mo) {
+		mo.addAttribute("products", ItemDao.getItems());
+		return "product-list";
+	}
+	
 }
