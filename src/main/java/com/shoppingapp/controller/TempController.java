@@ -2,8 +2,12 @@ package com.shoppingapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.shoppingapp.entity.User;
 
 @Controller
 public class TempController {
@@ -31,6 +35,28 @@ public class TempController {
 		return "product-list";
 	}
 	
+	@RequestMapping(value="/temp/customer-management", method=RequestMethod.GET)
+	public String getCustomerList(Model mo, @RequestParam(defaultValue="1") int pageNum, @RequestParam(defaultValue="5") int pageSize) {
+		mo.addAttribute("customers", new User[] {
+				new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN),
+				new User(-2,"Betty White","Bdubs","hello","b@w.jon","5550143",true,User.PRIVILAGE.STANDARD),
+				new User(-3,"Richard Feynmann","rfeyn","r@f.m","physics_roxx","5550144",false,User.PRIVILAGE.STANDARD)
+		});
+		mo.addAttribute("pageSize", pageSize);
+		mo.addAttribute("pageNum", pageNum);
+		return "customer-list";
+	}
+
+	@RequestMapping(value="/temp/register", method=RequestMethod.GET)
+	public String getRegister() {
+		return "register";
+	}
+	
+	@RequestMapping(value="/temp/product/{id}", method=RequestMethod.GET)
+	public String getProductDetail(Model model, @PathVariable int id) {
+		model.addAttribute("product", new MiniProduct("Black Lotus","Trading Card","mint",40000));
+		return "product-detail";
+	}
 	
 	public class MiniProduct{
 		public String name, category, condition; public int price;

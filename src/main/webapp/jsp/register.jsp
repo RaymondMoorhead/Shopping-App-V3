@@ -19,13 +19,28 @@
 		<h1>Register</h1>
 		<form name="loginForm" action="registerUser" method="post">
 			<fieldset>
-				<label for="username">User-name</label><input class="textbox" type="text" name="username" /><br /> 
+				<label for="username">Name</label><br/>
+				<input class="textbox" type="text" name="username" /><br /> 
 			</fieldset>
 			<fieldset>
-				<label for="password">Password</label><input class="textbox" type="password" name="password" /> <br/>
+				<label for="username">Email</label><br/>
+				<input class="textbox" type="email" name="username" /><br /> 
 			</fieldset>
 			<fieldset>
-				<label for="confirm_password">Password</label><input class="textbox" type="password" name="confirm_password" /> <br/>
+				<label for="username">Phone</label><br/>
+				<input class="textbox" type="phone" name="username" /><br /> 
+			</fieldset>
+			<fieldset>
+				<label for="username">Username</label><br/>
+				<input class="textbox" type="text" name="username" /><br /> 
+			</fieldset>
+			<fieldset>
+				<label for="password">Password</label><br/>
+				<input class="textbox" type="password" name="password" /> <br/>
+			</fieldset>
+			<fieldset>
+				<label for="confirm_password">Confirm Password</label><br/>
+				<input class="textbox" type="password" name="confirm_password" /> <br/>
 			</fieldset>
 			<div style="padding-left:10em;">
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

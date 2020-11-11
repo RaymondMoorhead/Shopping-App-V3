@@ -14,39 +14,41 @@
 <%@include file="header.jsp" %>
 <div class="main" >
 	<h2>Product Inventory Page</h2>
-	<form action="./product-list" method="GET">
-		<select onChange="this.form.submit()">
+	<form action="./customer-management" method="GET">
+		<label>Page Size</label>
+		<select onChange="this.form.submit()" name="pageSize">
 			<c:forTokens items="5,10,20,50,100" delims="," var="size">
-			<option value="<c:out value="${size}"/>"><c:out value="${size}"/></option>
+				<option value="${size}"  ${ size==pageSize?"selected":""} ><c:out value="${size}"/></option>
 			</c:forTokens>
 		</select>
 	</form>
 	<table>
 		<thead>
 			<tr>
-				<td></td>
-				<td>Product Name</td>
-				<td>Category</td>
-				<td>Condition</td>
-				<td>Price</td>
+				<td>Name</td>
+				<td>Email</td>
+				<td>Phone</td>
+				<td>User-name</td>
+				<td>Enabled</td>
 			</tr>
 		</thead>
 		<tbody>
 			<% boolean even=false; %>
-			<c:forEach var="product" items="${products}">
-			
-			<tr class="<%= even?"even":""%>" >
-				<td ><img src="/f"/></td>
-				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/temp/product/1">${product.name }</a></td>
-				<td>${product.category }</td>
-				<td>${product.condition }</td>
-				<td>${product.price }</td>
-				<% even=!even; %>
+			<c:forEach var="cust" items="${customers}">
+			<tr <%= even?"class='even'":"" %> >
+				<td>${cust.name }</td>
+				<td>${cust.email }</td>
+				<td>${cust.phone }</td>
+				<td>${cust.username }</td>
+				<td>${cust.enabled }</td>
+				<td><button>${cust.enabled?"disable":"enable" }</button>
 			</tr>
-			</a>
+			<% even=!even; %>
 			</c:forEach>
 		</tbody>
 	</table>
+	<a href="./customer-management?pageSize=${pageSize }&pageNum=${pageNum-1 }">Prev</a>
+	<a href="./customer-management?pageSize=${pageSize }&pageNum=${pageNum+1 }">Next</a>
 </div>
 </body>
 </html>

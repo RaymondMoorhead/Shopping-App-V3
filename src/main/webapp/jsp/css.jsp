@@ -12,7 +12,8 @@ div.main{
 	min-height:100%;
 }
 label{
-	margin:1em;
+	margin-right:1em;
+	margin-bottom:.5em;
 	display:inline-block;
 	width:10%;
 }
@@ -25,18 +26,30 @@ label{
 	padding:.5em 1em .5em;
 	border-radius:.5em;
 	font-weight:bold;
+	background-color:white;
+	border: 1px solid black;
+	color:black;
+	font-weight:normal;
+	text-decoration:none;
+	font-size:1em;
 }
-.btn:hover{
-  background-color: #1e6e21;
+.btn.btn-primary{
+	background-color:rgb(103,203,165);
+	color:white;
+	border:0;
 }
 
-.btn.btn-primary{
-	background-color:green;
+.btn:hover{
+	background-color:rgb(83,143,125);
 	color:white;
-	border-color:green;
 }
+.btn.btn-primary:hover{
+	background-color:rgb(83,143,125);
+}
+
 fieldset{
 	border:0;
+	margin-bottom:.25em;
 }
 .card{
 	display:inline-block;
@@ -112,6 +125,27 @@ fieldset{
 table{
 	width:90%;
 	margin:auto;
+}
+
+thead{
+	color:white;
+	background-color:#222;
+}
+tr.even{
+	background-color:#efd;
+}
+
+.bold{
+	font-weight:bold;
+}
+.flex-container{
+	display:flex;
+}
+.flex-child{
+	flex:1;
+}
+flex-child:first-child{
+
 }
 
 </style>
