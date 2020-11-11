@@ -1,7 +1,5 @@
 package com.shoppingapp.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,15 +8,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.shoppingapp.dao.UserDao;
-import com.shoppingapp.entity.Item;
+import com.shoppingapp.dao.ItemDao;
 import com.shoppingapp.entity.Item.CONDITION;
 import com.shoppingapp.entity.User.PRIVILAGE;
 import com.shoppingapp.service.Service;
@@ -75,4 +71,37 @@ public class LoginController
 		}
 		return "redirect:/login";
 	}
+	
+	//add product page is brought up
+	@RequestMapping(value = "/add-product", method = RequestMethod.GET)
+	public String AddProductPage() {
+		return "add-product";
+	}
+	
+	//add product page sends the post request to add new item
+	@RequestMapping(value = "/add-product", method = RequestMethod.POST)
+	public String AddProductPost(@RequestParam String name, @RequestParam String code, @RequestParam String category, @RequestParam CONDITION condition, @RequestParam long price) {
+		Service.addNewItem(name, code, category, condition, price);
+		return "add-product";
+	}
+	
+	//customer-list page is brought up
+	@RequestMapping(value = "/customer-list", method = RequestMethod.GET)
+	public String CustomerListPage() {
+		return "customer-list";
+	}
+	
+	//product-detail page is brought up
+	@RequestMapping(value = "/product-detail", method = RequestMethod.GET)
+	public String ProductDetailPage(String code) {
+		ItemDao.getItem(code); //reference ItemDao if needed to clarify code param
+		return "product-detail";
+	}
+	
+	//product-list page is brought up
+	@RequestMapping(value = "/product-list", method = RequestMethod.GET)
+	public String ProductListPage() {
+		return "product-list";
+	}
+	
 }

@@ -50,6 +50,7 @@ public class Service {
 		HttpSession session = request.getSession();
 		cart.add(item);
 		session.setAttribute("cart", cart);
+		System.out.println(session.getAttribute("cart").toString());
 	}
 
 }
