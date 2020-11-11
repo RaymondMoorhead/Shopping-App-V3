@@ -25,6 +25,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 		{
 				String userName = authentication.getName();
 				String password = authentication.getCredentials().toString();
+				CommonDao.initialize();
 				LoginState login = UserDao.getUser(userName, password);
 
 				if (login.user != null)

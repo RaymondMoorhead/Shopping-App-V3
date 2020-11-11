@@ -288,7 +288,6 @@ public class UserDao {
 	}
 	
 	private static String encryptPass(String name, String password) {
-		//return Encrypt.encryptIrreversable(password, name, password, 20);
-		return password;
+		return Encrypt.encrypt(password, name, password, 20);
 	}
 }
