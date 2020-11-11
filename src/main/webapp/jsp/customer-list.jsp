@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Login</title>
+<title>Customer Management</title>
 <%@include file="css.jsp" %>
 </head>
 <body>
@@ -29,6 +29,7 @@
 				<td>Email</td>
 				<td>Phone</td>
 				<td>User-name</td>
+				<td>Priviledge</td>
 				<td>Enabled</td>
 			</tr>
 		</thead>
@@ -40,6 +41,7 @@
 				<td>${cust.email }</td>
 				<td>${cust.phone }</td>
 				<td>${cust.username }</td>
+				<td>${cust.privilage }</td>
 				<td>${cust.enabled }</td>
 				<td><button>${cust.enabled?"disable":"enable" }</button>
 			</tr>

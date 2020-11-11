@@ -38,11 +38,13 @@ public class TempController {
 	
 	@RequestMapping(value="/admin/customer-management", method=RequestMethod.GET)
 	public String getCustomerList(Model mo, @RequestParam(defaultValue="1") int pageNum, @RequestParam(defaultValue="5") int pageSize) {
+		User u = new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN);
 		mo.addAttribute("customers", new User[] {
-				new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN),
+				u,
 				new User(-2,"Betty White","Bdubs","hello","b@w.jon","5550143",true,User.PRIVILAGE.STANDARD),
 				new User(-3,"Richard Feynmann","rfeyn","r@f.m","physics_roxx","5550144",false,User.PRIVILAGE.STANDARD)
 		});
+		mo.addAttribute("user",u);
 		mo.addAttribute("pageSize", pageSize);
 		mo.addAttribute("pageNum", pageNum);
 		return "customer-list";
