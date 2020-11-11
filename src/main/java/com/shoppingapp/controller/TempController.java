@@ -2,6 +2,7 @@ package com.shoppingapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,19 +12,19 @@ import com.shoppingapp.entity.User;
 
 @Controller
 public class TempController {
-	@RequestMapping(value="/temp/add-product", method=RequestMethod.GET)
+	@RequestMapping(value="/add-product", method=RequestMethod.GET)
 	public String getAddProduct(Model mo) {
 		mo.addAttribute("product", new MiniProduct("","","",0));
 		return "add-product";
 	}
-	@RequestMapping(value="/temp/edit-product", method=RequestMethod.GET)
+	@RequestMapping(value="/edit-product", method=RequestMethod.GET)
 	public String getAddProduct2(Model mo) {
 		mo.addAttribute("product", new MiniProduct("Black Lotus","Trading Card","mint",40000));
 		return "add-product";
 	}
 	
 	
-	@RequestMapping(value="/temp/product-list", method = RequestMethod.GET)
+	@RequestMapping(value="/product-list", method = RequestMethod.GET)
 	public String productList(Model mo) {
 		MiniProduct[] m = new MiniProduct[] {
 				new MiniProduct("Black Lotus","Trading Card","mint",40000),
@@ -35,7 +36,7 @@ public class TempController {
 		return "product-list";
 	}
 	
-	@RequestMapping(value="/temp/customer-management", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/customer-management", method=RequestMethod.GET)
 	public String getCustomerList(Model mo, @RequestParam(defaultValue="1") int pageNum, @RequestParam(defaultValue="5") int pageSize) {
 		mo.addAttribute("customers", new User[] {
 				new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN),
@@ -52,10 +53,29 @@ public class TempController {
 		return "register";
 	}
 	
-	@RequestMapping(value="/temp/product/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="/product/{id}", method=RequestMethod.GET)
 	public String getProductDetail(Model model, @PathVariable int id) {
 		model.addAttribute("product", new MiniProduct("Black Lotus","Trading Card","mint",40000));
 		return "product-detail";
+	}
+	
+	
+	@RequestMapping(value="/product/{id}", method=RequestMethod.POST)
+	public String postAddToCart(Model m, @PathVariable int id) {
+		m.addAttribute("product", new MiniProduct("Black Lotus","Trading Card","mint",40000));
+		m.addAttribute("message", "This product has been added to your cart");
+		return "product-detail";
+	}
+	
+	@RequestMapping(value="/temp/cart", method=RequestMethod.GET)
+	public String getCart(Model model) {
+		MiniProduct[] m = new MiniProduct[] {
+				new MiniProduct("Black Lotus","Trading Card","mint",40000),
+				new MiniProduct("Superman Issue #1","Comic book", "used", 50000),
+				new MiniProduct("Inverted Jenny", "Stamp", "ripped", 100000000)
+			};
+		model.addAttribute("products", m);
+		return "cart";
 	}
 	
 	public class MiniProduct{

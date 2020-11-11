@@ -15,7 +15,7 @@ label{
 	margin-right:1em;
 	margin-bottom:.5em;
 	display:inline-block;
-	width:10%;
+	width:20%;
 }
 .textbox{
 	width:80%;
@@ -144,8 +144,12 @@ tr.even{
 .flex-child{
 	flex:1;
 }
-flex-child:first-child{
-
+.message{
+	background-color:#eef;
+	padding:1em;
+	margin:0 0 1em 0;
+	border:1px solid #556;
+	border-radius:1em;
 }
 
 </style>

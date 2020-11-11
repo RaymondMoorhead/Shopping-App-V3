@@ -4,15 +4,17 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Login</title>
+<title>Products</title>
 <%@include file="css.jsp" %>
 </head>
 <body>
 <%@include file="header.jsp" %>
 <div class="main" >
+	<fmt:setLocale value = "en_US"/>
 	<h2>Product Inventory Page</h2>
 	<form action="./product-list" method="GET">
 		<select onChange="this.form.submit()">
@@ -40,7 +42,7 @@
 				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/temp/product/1">${product.name }</a></td>
 				<td>${product.category }</td>
 				<td>${product.condition }</td>
-				<td>${product.price }</td>
+				<td><fmt:formatNumber value = "${product.price/100}" type = "currency"/></td>
 				<% even=!even; %>
 			</tr>
 			</a>
