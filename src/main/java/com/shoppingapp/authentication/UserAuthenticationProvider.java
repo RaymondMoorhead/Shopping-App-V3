@@ -4,6 +4,8 @@ package com.shoppingapp.authentication;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ServletContextAware;
 
 import com.shoppingapp.dao.CommonDao;
 import com.shoppingapp.dao.UserDao;
@@ -23,6 +26,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 		@Override
 		public Authentication authenticate(Authentication authentication) throws AuthenticationException
 		{
+			
 				String userName = authentication.getName();
 				String password = authentication.getCredentials().toString();
 				CommonDao.initialize();

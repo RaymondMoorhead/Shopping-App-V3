@@ -15,6 +15,7 @@
 <%@include file="header.jsp" %>
 <div class="main" >
 	<h2>Shopping Cart</h2>
+	<p>${products!=null }</p>
 	<table>
 		<thead>
 			<tr>

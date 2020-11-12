@@ -1,5 +1,7 @@
 package com.shoppingapp.dao;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,10 +24,13 @@ public class ItemDao {
 					+ "name varchar(255), "
 					+ "category varchar(255), "
 					+ "state varchar(32), "
-					+ "price bigint")) {
-				addItem(new Item("Sofa, Leather", "Sl1", "Couch", Item.CONDITION.NEW, 200000));
-				addItem(new Item("Sofa, Handwoven", "Sh1", "Couch", Item.CONDITION.USED, 500000));
-				addItem(new Item("Chair, Leather", "Cl1", "Chair", Item.CONDITION.NEW, 5000));
+					+ "price bigint, "
+					+ "stock bigint, "
+					+ "description varchar(1024), "
+					+ "manufacturer varchar(255)")) {
+				addItem(new Item("Sofa, Leather", "Sl1", "Couch", Item.CONDITION.NEW, 200000, 5, "A leather couch", "Arizona Chair Co."), null);
+				addItem(new Item("Sofa, Handwoven", "Sh1", "Couch", Item.CONDITION.USED, 500000, 0, "A lightly used sofa of excellent quality", "Seats R' Us"), null);
+				addItem(new Item("Chair, Leather", "Cl1", "Chair", Item.CONDITION.NEW, 5000, 5, "A leather chair", "Arizona Chair Co."), null);
 			}
 			
 		} catch (SQLException e) {
@@ -49,6 +54,9 @@ public class ItemDao {
 					curItem.price = result.getLong("price");
 					curItem.category = result.getString("category");
 					curItem.condition = Item.CONDITION.valueOf(result.getString("state"));
+					curItem.unitsInStock = result.getLong("stock");
+					curItem.description = result.getString("description");
+					curItem.manufacturer = result.getString("manufacturer");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -75,6 +83,9 @@ public class ItemDao {
 					curItem.price = result.getLong("price");
 					curItem.category = result.getString("category");
 					curItem.condition = Item.CONDITION.valueOf(result.getString("state"));
+					curItem.unitsInStock = result.getLong("stock");
+					curItem.description = result.getString("description");
+					curItem.manufacturer = result.getString("manufacturer");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -96,6 +107,9 @@ public class ItemDao {
 					item.setPrice(result.getLong("price"));
 					item.setCategory(result.getString("category"));
 					item.setCondition(Item.CONDITION.valueOf(result.getString("state")));
+					item.setUnitsInStock(result.getLong("stock"));
+					item.setDescription(result.getString("description"));
+					item.setManufacturer(result.getString("manufacturer"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -104,18 +118,30 @@ public class ItemDao {
 		return item;
 	}
 	
-	public static void addItem(Item item) {
+	public static void addItem(Item item, String truePath) {
 		try {
 			Connection conn = CommonDao.getConnection();
 			PreparedStatement stmt;
 			
-			stmt = conn.prepareStatement("insert into item(code, name, price, category, state) values(?, ?, ?, ?, ?)");
+			stmt = conn.prepareStatement("insert into item(code, name, price, category, state, stock, description, manufacturer) values(?, ?, ?, ?, ?, ?, ?, ?)");
 			stmt.setString(1, item.code);
 			stmt.setString(2, item.name);
 			stmt.setLong(3, item.price);
 			stmt.setString(4, item.category);
 			stmt.setString(5, item.condition.name());
+			stmt.setLong(6, item.unitsInStock);
+			stmt.setString(7, item.description);
+			stmt.setString(8, item.manufacturer);
 			stmt.executeUpdate();
+			
+			// now add the image
+			if(item.image != null) {
+				try {
+					item.image.transferTo(new File(getImagePath(truePath, item)));
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -123,22 +149,38 @@ public class ItemDao {
 		}
 	}
 	
-	public static void updateItem(Item item) {
+	public static void updateItem(Item item, String truePath) {
 		try {
 			Connection conn = CommonDao.getConnection();
 			PreparedStatement stmt;
 			
-			stmt = conn.prepareStatement("update item set name=?, price=?, category=?, state=? where code=?");
+			stmt = conn.prepareStatement("update item set name=?, price=?, category=?, state=?, stock=?, description=?, manufacturer=? where code=?");
 			stmt.setString(1, item.name);
 			stmt.setLong(2, item.price);
 			stmt.setString(3, item.category);
 			stmt.setString(4, item.condition.name());
 			stmt.setString(5, item.code);
+			stmt.setLong(6, item.unitsInStock);
+			stmt.setString(7, item.description);
+			stmt.setString(8, item.manufacturer);
 			stmt.executeUpdate();
+			
+			// now add the image
+			if(item.image != null) {
+				try {
+					item.image.transferTo(new File(getImagePath(truePath, item)));
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private static String getImagePath(String truePath, Item item) {
+		return truePath + "\\images\\item\\" + item.code + ".png";
 	}
 }
