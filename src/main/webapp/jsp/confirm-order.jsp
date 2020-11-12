@@ -14,16 +14,23 @@
 <body>
 <%@include file="header.jsp" %>
 <div class="main" >
-	<h2>Shopping Cart</h2>
+	<h2>Order Submitted</h2>
+	<h3>Your order has been processed</h3>
 	<table>
-		<thead>
-			<tr>
-				<td>Product</td>
-				<td>Price</td>
-			</tr>
-		</thead>
 		<tbody>
-			<% boolean even=false; %>
+			<tr>
+				<td class="bold">Name</td>
+				<td>Church of 8 Wheels</td>
+			</tr>
+			<tr class="even">
+				<td class="bold">Billing Address:</td>
+				<td>554 Filmore St, San Franciso, CA</td>
+			</tr>
+			<tr>
+				<td class="bold">Product</td>
+				<td class="bold">Price</td>
+			</tr>
+			<% boolean even=true; %>
 			<c:forEach var="product" items="${products}">
 			
 			<tr class="<%= even?"even":""%>" >
@@ -45,22 +52,6 @@
 			</tr>
 		</tfoot>
 	</table>
-	<form action="./confirm-order" method="POST">
-		<fieldset>
-			<label>Credit Card</label>
-			<input class="textbox" type="text" name="creditcard" style="width:40%;"/>
-		</fieldset>
-		<fieldset>
-			<label>CCV</label>
-			<input class="textbox" type="text" name="ccv" style="width:10%;"/>
-		</fieldset>
-		<fieldset>
-			<label>Expiration Date</label>
-			<input class="textbox" type="date" name="expiration" style="width:40%;"/>
-		</fieldset>
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		<button class="btn btn-primary">Submit</button>
-	</form>
 </div>
 </body>
 </html>

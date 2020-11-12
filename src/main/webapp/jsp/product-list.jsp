@@ -16,6 +16,9 @@
 <div class="main" >
 	<fmt:setLocale value = "en_US"/>
 	<h2>Product Inventory Page</h2>
+	<c:if test="${user!=null && user.privilage == 'ADMIN' }">
+		<a href="./add-product">Add Product</a>
+	</c:if>
 	<form action="./product-list" method="GET">
 		<select onChange="this.form.submit()">
 			<c:forTokens items="5,10,20,50,100" delims="," var="size">
@@ -31,6 +34,9 @@
 				<td>Category</td>
 				<td>Condition</td>
 				<td>Price</td>
+				<c:if test="${user!=null && user.privilage == 'ADMIN' }">
+					<td>Edit</td>
+				</c:if>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,10 +45,13 @@
 			
 			<tr class="<%= even?"even":""%>" >
 				<td ><img src="/f"/></td>
-				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/product/1">${product.name }</a></td>
+				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/product-detail?code=${product.code }">${product.name }</a></td>
 				<td>${product.category }</td>
 				<td>${product.condition }</td>
 				<td><fmt:formatNumber value = "${product.price/100}" type = "currency"/></td>
+				<c:if test="${user!=null && user.privilage == 'ADMIN' }">
+				<td><a href="./edit-product">Edit</a></td>
+				</c:if>
 				<% even=!even; %>
 			</tr>
 			</a>

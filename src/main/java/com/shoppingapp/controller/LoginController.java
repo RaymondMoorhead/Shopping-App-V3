@@ -33,7 +33,8 @@ public class LoginController
 		if(session.getAttribute("cart") == null) {
 			Service.establishCart(request, response);
 		}
-		return new ModelAndView("welcome");
+		ModelAndView mav = new ModelAndView("welcome");
+		return mav;
 	}
 	
 	//potentially to be renamed
