@@ -68,13 +68,20 @@ fieldset{
   transition: .5s;
 }
 .item-title{
+	width:100%;
 	margin:0 1em 0 1em;
 	font-weight:bold;
+	overflow:hidden;
+	text-overflow:elipsis;
+	white-space:no-wrap;
 }
 .thumbnail{
 	width:75%;
 	height:75%;
 	margin:0 1em 0 1em;
+}
+.item-body{
+	text-overflow:elipsis;
 }
 .thumbnail img{
 	display: block;
