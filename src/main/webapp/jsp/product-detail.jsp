@@ -29,7 +29,7 @@
 			<p><span class="bold">Condition:</span> ${product.condition }</p>
 			<p><span class="bold">Price:</span> <fmt:formatNumber value = "${product.price/100}" type = "currency"/></p>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<form method="POST" action="../product/1">
+			<form method="POST" action="../product-detail/">
 				<a class="btn" href="/SpringWebwithSpringSecurity/product-list/">Back</a>
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<button class="btn btn-primary" >Add to Cart</button>

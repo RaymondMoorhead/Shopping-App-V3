@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +28,9 @@ public class LoginController
 {
 	//welcome page
 	@RequestMapping(value="/welcome")
-	public ModelAndView WelcomeUser(HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView WelcomeUser(HttpServletRequest request, HttpServletResponse response, Model mo)
 	{	
+		mo.addAttribute("products", ItemDao.getItems());
 		HttpSession session = request.getSession();
 		if(session.getAttribute("cart") == null) {
 			Service.establishCart(request, response);
@@ -48,6 +50,7 @@ public class LoginController
 	//login page
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String LoginPage(ModelMap model) {
+		
 		return "login";
 	}
 	
@@ -96,16 +99,16 @@ public class LoginController
 	}
 	
 	//product-detail page is brought up
-	@RequestMapping(value = "/product-detail", method = RequestMethod.GET)
-	public String ProductDetailPage(Model mo, String code) {
+	@RequestMapping(value = "/product-detail/{code}", method = RequestMethod.GET)
+	public String ProductDetailPage(Model mo, @PathVariable String code) {
 		mo.addAttribute("product",ItemDao.getItem(code));
 		return "product-detail";
 	}
 	
 	//when the add to cart button is clicked, should post and save item to cart
 	@RequestMapping(value = "/product-detail", method = RequestMethod.POST)
-	public String ProductDetailPost(HttpServletRequest request, HttpServletResponse response, Item item) {
-		Service.addToCart(request, response, item);
+	public String ProductDetailPost(HttpServletRequest request, HttpServletResponse response, String code) {
+		Service.addToCart(request, response, code);
 		return "product-detail";
 	}
 	
