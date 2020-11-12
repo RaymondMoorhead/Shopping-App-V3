@@ -12,7 +12,9 @@ import com.shoppingapp.entity.User;
 
 @Controller
 public class TempController {
-	@RequestMapping(value="/temp/add-product", method=RequestMethod.GET)
+	/*
+	@RequestMapping(value="/add-product", method=RequestMethod.GET)
+>>>>>>> 282dc6638fca29aac6ef74474395124b51d174b1
 	public String getAddProduct(Model mo) {
 		mo.addAttribute("product", new MiniProduct("","","",0));
 		return "add-product";
@@ -115,5 +117,5 @@ public class TempController {
 			return name;
 		}
 	} 
-	
+	*/
 }

@@ -45,7 +45,7 @@
 			
 			<tr class="<%= even?"even":""%>" >
 				<td ><img src="/f"/></td>
-				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/product-detail?code=${product.code }">${product.name }</a></td>
+				<td><a href="http://localhost:8080/SpringWebwithSpringSecurity/product-detail/${product.code}">${product.name }</a></td>
 				<td>${product.category }</td>
 				<td>${product.condition }</td>
 				<td><fmt:formatNumber value = "${product.price/100}" type = "currency"/></td>
