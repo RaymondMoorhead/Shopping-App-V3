@@ -18,9 +18,9 @@ Welcome! Your login was successful...!
 
 <div>
 <h2>Some things to look at</h2>
-<c:forEach begin="0" end="13" step="1">
+<c:forEach begin="0" end="13" step="1" var="product" items="${products}">
 <div class="card">
-	<div class="item-title">Item name</div>
+	<div class="item-title">${product.name}</div>
 	<div class="thumbnail"><img src="f" /></div>
 	<div class="item-body">Item description</div>
 </div>

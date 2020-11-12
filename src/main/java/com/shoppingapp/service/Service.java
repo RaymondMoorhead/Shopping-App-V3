@@ -51,8 +51,9 @@ public class Service{
 		session.setAttribute("cart", cart);
 	}
 	
-	public static void addToCart(HttpServletRequest request, HttpServletResponse response, Item item) {
+	public static void addToCart(HttpServletRequest request, HttpServletResponse response, String code) {
 		HttpSession session = request.getSession();
+		Item item = ItemDao.getItem(code);
 		cart.add(item);
 		session.setAttribute("cart", cart);
 	}
