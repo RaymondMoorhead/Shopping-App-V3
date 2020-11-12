@@ -16,7 +16,7 @@
 		<li><a href="<c:url value="/logout"/>">Logout</a></li>
 		<li><a href="<c:url value="/cart"/>">Cart</a></li>
 		<c:if test="${user!=null && user.privilage == 'ADMIN' }">
-		<li><a href="<c:url value="/admin/customer-management"/>">Admin</a></li>
+		<li><a href="<c:url value="/customer-list"/>">Admin</a></li>
 		</c:if>
 	</ul>
 </div>
