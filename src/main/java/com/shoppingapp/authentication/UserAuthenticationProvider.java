@@ -36,7 +36,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
 				{
 						List<GrantedAuthority> grantedAuths = new ArrayList<>();
 						grantedAuths.add(()-> {return "AUTH_USER";});
-						Authentication auth = new UsernamePasswordAuthenticationToken(userName, password, grantedAuths);
+						Authentication auth = new UsernamePasswordAuthenticationToken(login.user, password, grantedAuths);
 						System.out.println(auth.getAuthorities());
 						return auth;
 				}

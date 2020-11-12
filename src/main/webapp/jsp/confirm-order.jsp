@@ -20,11 +20,11 @@
 		<tbody>
 			<tr>
 				<td class="bold">Name</td>
-				<td>Church of 8 Wheels</td>
+				<td>${user.name }</td>
 			</tr>
 			<tr class="even">
 				<td class="bold">Billing Address:</td>
-				<td>554 Filmore St, San Franciso, CA</td>
+				<td>${user.billingAddress }</td>
 			</tr>
 			<tr>
 				<td class="bold">Product</td>

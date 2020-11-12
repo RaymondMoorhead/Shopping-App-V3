@@ -52,11 +52,20 @@ public class LoginController implements ServletContextAware
 	@RequestMapping(value = "/cart", method = RequestMethod.GET)
 	public String CartPage(Model model, HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		System.out.println((List<Item>)session.getAttribute("cart"));
 		model.addAttribute("products", (List<Item>)session.getAttribute("cart")); //this will be a list
 		return "cart";
 	}
+	@RequestMapping(value="/confirm-order", method=RequestMethod.POST)
+	public String getConfirmOrder(Model mo,  HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
+		
+		mo.addAttribute("products", (List<Item>)session.getAttribute("cart"));
+		mo.addAttribute("user", auth.getPrincipal());
+		return "confirm-order";
+	}
+	
 	//login page
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String LoginPage(ModelMap model) {

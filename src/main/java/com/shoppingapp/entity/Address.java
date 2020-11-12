@@ -40,4 +40,7 @@ public class Address {
 		this.state = state;
 	}
 	
+	public String toString() {
+		return this.streetName+" "+this.apptNo!=null?this.apptNo:""+" "+this.city+", "+this.state;
+	}
 }
