@@ -1,5 +1,7 @@
 package com.shoppingapp.dao;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.shoppingapp.authentication.Encrypt;
+import com.shoppingapp.entity.Address;
 import com.shoppingapp.entity.Invoice;
 import com.shoppingapp.entity.Item;
 import com.shoppingapp.entity.LoginState;
@@ -27,9 +30,13 @@ public class UserDao {
 					+ "email varchar(255), "
 					+ "phone varchar(32), "
 					+ "enabled boolean, "
-					+ "privilage varchar(32),"
+					+ "privilage varchar(32), "
+					+ "street_name varchar(128), "
+					+ "appt_no varchar(32), "
+					+ "city varchar(64), "
+					+ "state varchar(16), "
 					+ "PRIMARY KEY(id)")) {
-				addUser(new User(-1, "admin", "admin", "admin", "noreply@mail.com", "999-999-9999", true, User.PRIVILAGE.ADMIN));
+				addUser(new User(-1, "admin", "admin", "admin", "noreply@mail.com", "999-999-9999", true, User.PRIVILAGE.ADMIN, new Address("George Street", "N/A", "George Town", "CA")), null);
 			}
 			
 			CommonDao.createTableIfMissing("invoice",
@@ -71,7 +78,12 @@ public class UserDao {
 										rs.getString("email"),
 										rs.getString("phone"),
 										rs.getBoolean("enabled"),
-										User.PRIVILAGE.valueOf(rs.getString("privilage")));
+										User.PRIVILAGE.valueOf(rs.getString("privilage")),
+										new Address(rs.getString("street_name"),
+													rs.getString("appt_no"),
+													rs.getString("city"),
+													rs.getString("state")
+												));
 					
                     
 					// check now that user is valid, use it as an early out
@@ -79,6 +91,7 @@ public class UserDao {
 						return new LoginState("Invalid Credentials", null);
 					else if(!result.isEnabled())
 						return new LoginState("Account Disabilitation", null);
+
 				}
 				else
 					return new LoginState("Invalid Credentials", null);
@@ -110,7 +123,10 @@ public class UserDao {
 												rsItem.getString("code"),
 												rsItem.getString("category"),
 												Item.CONDITION.valueOf(rsItem.getString("condition")),
-												rsItem.getLong("price")));
+												rsItem.getLong("price"),
+												rsItem.getLong("stock"),
+												rsItem.getString("description"),
+												rsItem.getString("manufacturer")));
 						}
 						rsItem.close();
 					}
@@ -140,7 +156,13 @@ public class UserDao {
 										rs.getString("email"),
 										rs.getString("phone"),
 										rs.getBoolean("enabled"),
-										User.PRIVILAGE.valueOf(rs.getString("privilage"))));
+										User.PRIVILAGE.valueOf(rs.getString("privilage")),
+										new Address(rs.getString("street_name"),
+													rs.getString("appt_no"),
+													rs.getString("city"),
+													rs.getString("state")
+											)));
+
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -166,7 +188,13 @@ public class UserDao {
 										rs.getString("email"),
 										rs.getString("phone"),
 										rs.getBoolean("enabled"),
-										User.PRIVILAGE.valueOf(rs.getString("privilage"))));
+										User.PRIVILAGE.valueOf(rs.getString("privilage")),
+										new Address(rs.getString("street_name"),
+													rs.getString("appt_no"),
+													rs.getString("city"),
+													rs.getString("state")
+											)));
+
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -192,7 +220,7 @@ public class UserDao {
 		return false;
 	}
 	
-	public static void addUser(User user) {
+	public static void addUser(User user, String truePath) {
 
 			if(userExists(user.name))
 				return;
@@ -201,7 +229,7 @@ public class UserDao {
 				Connection conn = CommonDao.getConnection();
 				PreparedStatement stmt;
 				
-				stmt = conn.prepareStatement("insert into user(name, username, password, email, phone, enabled, privilage) values(?, ?, ?, ?, ?, ?, ?)");
+				stmt = conn.prepareStatement("insert into user(name, username, password, email, phone, enabled, privilage, street_name, appt_no, city, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				stmt.setString(1, user.name);
 				stmt.setString(2, user.username);
 				stmt.setString(3, user.password);
@@ -209,7 +237,25 @@ public class UserDao {
 				stmt.setString(5, user.phone);
 				stmt.setBoolean(6, user.enabled);
 				stmt.setString(7, user.privilage.name());
+				stmt.setString(8, user.billingAddress.streetName);
+				stmt.setString(9, user.billingAddress.apptNo);
+				stmt.setString(10, user.billingAddress.city);
+				stmt.setString(11, user.billingAddress.state);
 				stmt.executeUpdate();
+				
+//				+ "street_name varchar(128), "
+//				+ "appt_no varchar(32), "
+//				+ "city varchar(64), "
+//				+ "state varchar(16), "
+				
+				// now add the avatar
+				if(user.avatar != null) {
+					try {
+						user.avatar.transferTo(new File(getAvatarPath(truePath, user)));
+					} catch (IllegalStateException | IOException e) {
+						e.printStackTrace();
+					}
+				}
 				
 				// new users don't have invoices, so we don't need to add them
 				
@@ -218,7 +264,7 @@ public class UserDao {
 			}
 	}
 	
-	public static void updateUser(User user) {
+	public static void updateUser(User user, String truePath) {
 
 		// password must be re-encrypted, because the username may have changed
 		user.password = encryptPass(user.username, user.password);
@@ -226,7 +272,7 @@ public class UserDao {
 			Connection conn = CommonDao.getConnection();
 			PreparedStatement stmt;
 			
-			stmt = conn.prepareStatement("update user set name=?, username=?, password=?, email=?, phone=?, enabled=?, privilage=? where id=?");
+			stmt = conn.prepareStatement("update user set name=?, username=?, password=?, email=?, phone=?, enabled=?, privilage=?, street_name=?, appt_no=?, city=?, state=? where id=?");
 			stmt.setString(1, user.name);
 			stmt.setString(2, user.username);
 			stmt.setString(3, user.password);
@@ -234,8 +280,21 @@ public class UserDao {
 			stmt.setString(5, user.phone);
 			stmt.setBoolean(6, user.enabled);
 			stmt.setString(7, user.privilage.name());
-			stmt.setInt(8, user.id);
+			stmt.setString(8, user.billingAddress.streetName);
+			stmt.setString(9, user.billingAddress.apptNo);
+			stmt.setString(10, user.billingAddress.city);
+			stmt.setString(11, user.billingAddress.state);
+			stmt.setInt(12, user.id);
 			stmt.executeUpdate();
+			
+			// now add the avatar
+			if(user.avatar != null) {
+				try {
+					user.avatar.transferTo(new File(getAvatarPath(truePath, user)));
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
 			
 			// new users don't have invoices, so we don't need to add them
 			
@@ -289,5 +348,9 @@ public class UserDao {
 	
 	private static String encryptPass(String name, String password) {
 		return Encrypt.encrypt(password, name, password, 20);
+	}
+	
+	private static String getAvatarPath(String truePath, User user) {
+		return truePath + "\\images\\user\\" + user.id + ".png";
 	}
 }

@@ -3,6 +3,8 @@ package com.shoppingapp.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class User {
 	
 	public enum PRIVILAGE {
@@ -18,13 +20,16 @@ public class User {
 	public boolean enabled;
 	public PRIVILAGE privilage;
 	public List<Invoice> purchases;
-	
+	public MultipartFile avatar;
+	public Address billingAddress;
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(int id, String name, String username, String password, String email, String phone, boolean enabled, PRIVILAGE privilage) {
+	public User(int id, String name, String username, String password, String email, String phone, boolean enabled,
+			PRIVILAGE privilage, Address billingAddress) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,7 +39,7 @@ public class User {
 		this.phone = phone;
 		this.enabled = enabled;
 		this.privilage = privilage;
-		this.purchases = new ArrayList<Invoice>();
+		this.billingAddress = billingAddress;
 	}
 
 	public int getId() {
@@ -111,6 +116,22 @@ public class User {
 	
 	public void addPurchase(Invoice purchase) {
 		purchases.add(purchase);
+	}
+	
+	public MultipartFile getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(MultipartFile avatar) {
+		this.avatar = avatar;
+	}
+
+	public Address getBillingAddress() {
+		return billingAddress;
+	}
+
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
 	}
 
 	@Override

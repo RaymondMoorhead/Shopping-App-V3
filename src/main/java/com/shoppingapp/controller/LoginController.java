@@ -2,6 +2,7 @@ package com.shoppingapp.controller;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shoppingapp.dao.UserDao;
@@ -24,8 +26,10 @@ import com.shoppingapp.entity.User.PRIVILAGE;
 import com.shoppingapp.service.Service;
 
 @Controller
-public class LoginController
+public class LoginController implements ServletContextAware
 {
+	private String path;
+	
 	//welcome page
 	@RequestMapping(value="/welcome")
 	public ModelAndView WelcomeUser(HttpServletRequest request, HttpServletResponse response)
@@ -61,8 +65,8 @@ public class LoginController
 	//registers new user
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String RegisterPost(@RequestParam String name, @RequestParam String userName, @RequestParam String password, @RequestParam String email, @RequestParam String phone, @RequestParam boolean enabled,
-			@RequestParam PRIVILAGE privilage) {
-		Service.addNewUser(name, userName, password, email, phone, enabled, privilage);
+			@RequestParam PRIVILAGE privilage, @RequestParam String streetName, @RequestParam String apptNo, @RequestParam String city, @RequestParam String state) {
+		Service.addNewUser(name, userName, password, email, phone, enabled, privilage, streetName, apptNo, city, state, path);
 		return "register";
 	}
 		
@@ -74,5 +78,10 @@ public class LoginController
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
 		return "redirect:/login";
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		path = servletContext.getRealPath("/");
 	}
 }

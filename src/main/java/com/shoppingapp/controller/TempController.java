@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.shoppingapp.entity.Address;
 import com.shoppingapp.entity.User;
 
 @Controller
@@ -38,9 +39,9 @@ public class TempController {
 	@RequestMapping(value="/temp/customer-management", method=RequestMethod.GET)
 	public String getCustomerList(Model mo, @RequestParam(defaultValue="1") int pageNum, @RequestParam(defaultValue="5") int pageSize) {
 		mo.addAttribute("customers", new User[] {
-				new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN),
-				new User(-2,"Betty White","Bdubs","hello","b@w.jon","5550143",true,User.PRIVILAGE.STANDARD),
-				new User(-3,"Richard Feynmann","rfeyn","r@f.m","physics_roxx","5550144",false,User.PRIVILAGE.STANDARD)
+				new User(-1,"Jon Smith","JonJonJon","12345","jon@jon.jon","5550142",true,User.PRIVILAGE.ADMIN, new Address("", "", "", "")),
+				new User(-2,"Betty White","Bdubs","hello","b@w.jon","5550143",true,User.PRIVILAGE.STANDARD, new Address("", "", "", "")),
+				new User(-3,"Richard Feynmann","rfeyn","r@f.m","physics_roxx","5550144",false,User.PRIVILAGE.STANDARD, new Address("", "", "", ""))
 		});
 		mo.addAttribute("pageSize", pageSize);
 		mo.addAttribute("pageNum", pageNum);

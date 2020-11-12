@@ -1,6 +1,6 @@
 package com.shoppingapp.entity;
 
-//import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 public class Item {
 	
@@ -13,20 +13,29 @@ public class Item {
 	public String category;
 	public CONDITION condition;
 	public long price;
-//	public MultipartFile image;
+	public long unitsInStock;
+	public String description;
+	public String manufacturer;
+	public MultipartFile image;
 
 	public Item() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Item(String name, String code, String category, CONDITION condition, long price) {
+
+
+	public Item(String name, String code, String category, CONDITION condition, long price, long unitsInStock,
+			String description, String manufacturer) {
 		super();
 		this.name = name;
 		this.code = code;
 		this.category = category;
 		this.condition = condition;
 		this.price = price;
+		this.unitsInStock = unitsInStock;
+		this.description = description;
+		this.manufacturer = manufacturer;
 	}
 
 	public String getName() {
@@ -59,10 +68,28 @@ public class Item {
 	public void setPrice(long price) {
 		this.price = price;
 	}
-//	public MultipartFile getImage() {
-//		return image;
-//	}
-//	public void setImage(MultipartFile image) {
-//		this.image = image;
-//	}
+	public long getUnitsInStock() {
+		return unitsInStock;
+	}
+	public void setUnitsInStock(long unitsInStock) {
+		this.unitsInStock = unitsInStock;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getManufacturer() {
+		return manufacturer;
+	}
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+	public MultipartFile getImage() {
+		return image;
+	}
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}
 }
