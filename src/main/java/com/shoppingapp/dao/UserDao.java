@@ -147,7 +147,7 @@ public class UserDao {
 			try {
 				Connection conn = CommonDao.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select id,  from user limit ?, ?");
+				ResultSet rs = stmt.executeQuery("select * from user");
 				while(rs.next()) {
 					users.add(new User(rs.getInt("id"),
 										rs.getString("name"),
@@ -176,7 +176,7 @@ public class UserDao {
 		ArrayList<User> users = new ArrayList<User>();
 			try {
 				Connection conn = CommonDao.getConnection();
-				PreparedStatement stmt = conn.prepareStatement("select name from user limit ?, ?");
+				PreparedStatement stmt = conn.prepareStatement("select * from user limit ?, ?");
 				stmt.setInt(0, startRow);
 				stmt.setInt(1, numRows);
 				ResultSet rs = stmt.executeQuery();
